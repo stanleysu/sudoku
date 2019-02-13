@@ -9,9 +9,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "webpack-cli": "^3.2.3"
+    "babel-loader": "^8.0.0"
   },
   "dependencies": {
-    "webpack": "^4.29.3"
+    "@babel/core": "^7.2.2",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1"
   }
 }
