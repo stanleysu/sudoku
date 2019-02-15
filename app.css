@@ -1,0 +1,39 @@
+#board {
+	width: 36em;
+	height: 36em;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	overflow:hidden
+}
+
+.row {
+	width: 36em;
+	display: flex;
+}
+
+.cell {
+    width: 4em;
+    height: 4em;
+    display: flex;
+    color: black;
+
+    align-items: center; /*align vertically*/
+    justify-content: center; /*align horizontally*/
+}
+
+.cell:nth-child(3n+3):not(:last-child) {
+    border-right: 2px solid black;
+}
+
+.cell:not(:last-child) {
+    border-right: 1px solid black;
+}
+
+.row:not(:last-child) {
+    border-bottom: 1px solid black;
+}
+.row:nth-child(3n+3):not(:last-child) {
+    border-bottom: 2px solid black !important;
+}
