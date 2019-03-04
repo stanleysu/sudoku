@@ -5,14 +5,23 @@ import Cell from './Cell.jsx';
 
 class Board extends Component{
 	render(){
+		const {board} = this.props;
 		return (
 			<div id='board'>
 				{
-					this.props.gameState.board.map((row, index) => 
-						<div key={index} className='row'>
+					board.map((row, r) => 
+						<div key={r} className='boardRow'>
 							{
-								row.map((cellData, subindex) => 
-									<Cell cellData={cellData} />
+								row.map((cellData, c) => 
+									<Cell 
+										key={c} 
+										cellData={cellData} 
+										cellPosition={{row: r, col: c}}
+										cellRow={r} 
+										cellCol={c} 
+										selectedCell={this.props.selectedCell}
+										toggleSelectedCell={this.props.toggleSelectedCell}
+									/>
 								)
 							}
 						</div>
@@ -23,9 +32,10 @@ class Board extends Component{
 	}
 }
 
-
 Board.propTypes = {
-	gameState: PropTypes.object.isRequired,
+	board: PropTypes.object.isRequired,
+	selectedCell: PropTypes.object.isRequired,
+	toggleSelectedCell: PropTypes.func.isRequired
 }
 
 export default Board

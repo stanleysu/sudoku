@@ -1,39 +1,51 @@
+*, html {padding:0; margin:0;}
+
+#root {
+    position: relative;
+    width: 100%;
+}
 #board {
+    padding-top: 200px;
 	width: 36em;
 	height: 36em;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	overflow:hidden
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.row {
-	width: 36em;
-	display: flex;
+.boardRow {
+    height: 4em;
+    width: 36em;
 }
 
-.cell {
+.boardCell {
     width: 4em;
     height: 4em;
-    display: flex;
     color: black;
+    display: inline-block;
 
-    align-items: center; /*align vertically*/
-    justify-content: center; /*align horizontally*/
+    line-height: 4em;
+    text-align: center;
 }
 
-.cell:nth-child(3n+3):not(:last-child) {
+.boardRow:not(:last-child) {
+    border-bottom: 1px solid black;
+}
+.boardRow:nth-child(3n+3):not(:last-child) {
+    border-bottom: 2px solid black !important;
+}
+
+.boardCell:nth-child(3n+3):not(:last-child) {
     border-right: 2px solid black;
 }
 
-.cell:not(:last-child) {
+.boardCell:not(:last-child) {
     border-right: 1px solid black;
 }
 
-.row:not(:last-child) {
-    border-bottom: 1px solid black;
+.uneditable {
+    font-weight: 700;
 }
-.row:nth-child(3n+3):not(:last-child) {
-    border-bottom: 2px solid black !important;
+
+.selected {
+    background-color: rgb(240, 248, 255);
 }

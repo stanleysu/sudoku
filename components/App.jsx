@@ -2,32 +2,73 @@ import React, {Component} from 'react';
 import Board from './board/Board.jsx';
 
 class App extends Component{
-	render(){
-		const mockCell1 = {value: 1, editable: true}
-		const mockCell2 = {value: 2, editable: true}
-		const mockCell3 = {value: 3, editable: true}
-		const mockCellEmpty = {value: 0, editable: true}
-		const mockCellUneditable = {value: 3, editable: false}
+	constructor(props){
+		super(props);
 
-		
-		const mockGameState = {
-			board: [
-				[mockCell1, mockCell2, mockCell3, mockCellUneditable, mockCellEmpty, mockCell1, mockCell2, mockCell3, mockCellUneditable],
-				[mockCell1, mockCell2, mockCell3, mockCellUneditable, mockCellEmpty, mockCell1, mockCell2, mockCell3, mockCellUneditable],
-				[mockCell1, mockCell2, mockCell3, mockCellUneditable, mockCellEmpty, mockCell1, mockCell2, mockCell3, mockCellUneditable],
-				[mockCell1, mockCell2, mockCell3, mockCellUneditable, mockCellEmpty, mockCell1, mockCell2, mockCell3, mockCellUneditable],
-				[mockCell1, mockCell2, mockCell3, mockCellUneditable, mockCellEmpty, mockCell1, mockCell2, mockCell3, mockCellUneditable],
-				[mockCell1, mockCell2, mockCell3, mockCellUneditable, mockCellEmpty, mockCell1, mockCell2, mockCell3, mockCellUneditable],
-				[mockCell1, mockCell2, mockCell3, mockCellUneditable, mockCellEmpty, mockCell1, mockCell2, mockCell3, mockCellUneditable],
-				[mockCell1, mockCell2, mockCell3, mockCellUneditable, mockCellEmpty, mockCell1, mockCell2, mockCell3, mockCellUneditable],
-				[mockCell1, mockCell2, mockCell3, mockCellUneditable, mockCellEmpty, mockCell1, mockCell2, mockCell3, mockCellUneditable]
-			],
-			moves: []
+		const EMPTY_SQUARE = {value: "1", editable: false}
+		const EMPTY_ROW = Array(9).fill(EMPTY_SQUARE);
+		const EMPTY_BOARD = Array(9).fill(EMPTY_ROW);
+
+		this.state = { 
+			board: EMPTY_BOARD,
+			selectedCell: { 
+				isSelected: false,
+				row: -1,
+				col: -1,
+				val: 0
+			}
+		};
+		this.toggleSelectedCell = this.toggleSelectedCell.bind(this);
+		this.handleKeyDown = this.handleKeyDown.bind(this);
+	}
+
+	componentDidMount(){
+		document.addEventListener("keydown", this.handleKeyDown);
+	}
+
+	toggleSelectedCell(cellPosition){
+		//if clicked same cell, flip isSelected
+		//if clicked different cell, isSelected = true
+
+		var isSelected = this.state.selectedCell.isSelected;
+		if(cellPosition.row == this.state.selectedCell.row && cellPosition.col == this.state.selectedCell.col){
+			isSelected = !isSelected;
+		}
+		else{
+			isSelected = true;
 		}
 
+		this.setState({
+			selectedCell: {
+				isSelected: isSelected,
+				row: cellPosition.row,
+				col: cellPosition.col,
+				val: this.state.board[cellPosition.row][cellPosition.col].value
+			}
+		});
+	}
+
+	handleKeyDown(event){
+	 	if((event.keyCode >= 49 && event.keyCode <= 57) || (event.keyCode >= 97 && event.keyCode <= 105)) { 
+			if(this.state.selectedCell.isSelected){
+				const newBoard = this.state.board;
+				newBoard[this.state.selectedCell.row][this.state.selectedCell.col] = event.key;
+				
+				this.setState({
+					board: newBoard
+				})
+			}
+		}
+	}
+
+	render(){
 		return (
 			<div className='app'>
-				<Board gameState={mockGameState} />
+				<Board 
+					board={this.state.board} 
+					selectedCell={this.state.selectedCell}
+					toggleSelectedCell={this.toggleSelectedCell}
+				/>
 			</div>
 		)
 	}
