@@ -5,11 +5,13 @@
     width: 100%;
 }
 #board {
-    padding-top: 200px;
+    margin-top: 200px;
 	width: 36em;
 	height: 36em;
     margin-left: auto;
     margin-right: auto;
+
+    box-shadow: inset 1px -4px 6px rgba(145, 161, 181, .3)
 }
 
 .boardRow {
@@ -41,7 +43,9 @@
 .boardCell:not(:last-child) {
     border-right: 1px solid black;
 }
-
+.editable {
+    font-color: rgb(20,20,20);
+}
 .uneditable {
     font-weight: 700;
 }

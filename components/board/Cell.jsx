@@ -9,8 +9,11 @@ class Cell extends Component{
 	render(){
 		let className = 'boardCell'
 
-		if (this.props.cellData.editable) {
-			className += ' editable';
+		if (!this.props.cellData.editable) {
+			className += ' uneditable';
+		}
+		else {
+			className += ' editable'
 		}
 
 		if (this.props.selectedCell.isSelected && 
@@ -21,7 +24,7 @@ class Cell extends Component{
 
 		return (
 			<div className={className} onClick={this.onClick.bind(this)}>
-				{this.props.cellData.value == 0 ? '*' : this.props.cellData.value}
+				{this.props.cellData.value == "0" ? <span>&nbsp;</span> : this.props.cellData.value}
 			</div>
 		)
 	}
