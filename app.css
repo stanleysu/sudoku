@@ -22,11 +22,13 @@
 .boardCell {
     width: 4em;
     height: 4em;
-    color: black;
     display: inline-block;
-
     line-height: 4em;
     text-align: center;
+}
+
+.cellValue {
+    font-size: 20px;
 }
 
 .boardRow:not(:last-child) {
@@ -44,7 +46,7 @@
     border-right: 1px solid black;
 }
 .editable {
-    font-color: rgb(20,20,20);
+    color: rgb(20,20,20);
 }
 .uneditable {
     font-weight: 700;

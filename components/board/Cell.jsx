@@ -3,17 +3,17 @@ import React, {Component} from 'react';
 
 class Cell extends Component{
 	onClick(e){
-		this.props.toggleSelectedCell(this.props.cellPosition)
+		this.props.toggleSelectedCell(this.props.cellPosition);
 	}
 
 	render(){
-		let className = 'boardCell'
+		let className = 'boardCell';
 
 		if (!this.props.cellData.editable) {
 			className += ' uneditable';
 		}
 		else {
-			className += ' editable'
+			className += ' editable';
 		}
 
 		if (this.props.selectedCell.isSelected && 
@@ -22,9 +22,19 @@ class Cell extends Component{
 			className += ' selected'
 		}
 
+		let cellValue;
+		if(this.props.cellData.value == null){
+			cellValue = '\u00A0';
+		}
+		else {
+			cellValue = this.props.cellData.value;
+		}
+
 		return (
 			<div className={className} onClick={this.onClick.bind(this)}>
-				{this.props.cellData.value == "0" ? <span>&nbsp;</span> : this.props.cellData.value}
+				<span className='cellValue'>
+					{cellValue}
+				</span>
 			</div>
 		)
 	}

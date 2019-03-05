@@ -26,6 +26,10 @@ class App extends Component{
 		document.addEventListener("keydown", this.handleKeyDown);
 	}
 
+	componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleKeyDown);
+    }
+
 	toggleSelectedCell(cellPosition){
 		//if clicked same cell, flip isSelected
 		//if clicked different cell, isSelected = true
@@ -53,20 +57,20 @@ class App extends Component{
 			const keyCode = event.keyCode;
 			//check keycode between 1 to 9 on keyboard or numpad
 			if(isBetween1and9(keyCode) || isBackspaceOrDelete(keyCode)) { 
-				const newValue = isBetween1and9(keyCode) ? event.key : '0';
+				const newValue = isBetween1and9(keyCode) ? event.key : null;
 
 				if(this.state.board[this.state.selectedCell.row][this.state.selectedCell.col].editable){
 					const newBoard = deepCopy(this.state.board);
 					newBoard[this.state.selectedCell.row][this.state.selectedCell.col].value = newValue;
 					this.setState({
 						board: newBoard
-					})
+					});
 
 					const newSelectedCell = deepCopy(this.state.selectedCell);
 					newSelectedCell.val = newValue;
 					this.setState({
 						selectedCell: newSelectedCell
-					})
+					});
 				}
 			}
 		}
