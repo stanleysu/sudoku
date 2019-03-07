@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Board from './board/Board.jsx';
 
 import {deepCopy, getDefaultBoard, isBetween1and9, isBackspaceOrDelete} from './utils.js';
-
+import Socket from '../socket.js';
 class App extends Component{
 	constructor(props){
 		super(props);
@@ -27,32 +27,26 @@ class App extends Component{
 	componentDidMount(){
 		document.addEventListener("keydown", this.handleKeyDown);
 
-		let ws = this.ws = new WebSocket('ws://echo.websocket.org');
-		ws.onmessage = this.message.bind(this);
-		ws.onopen = this.open.bind(this);
-		ws.onclose = this.close.bind(this);
+		let socket = this.socket = new Socket();
+		socket.on('connect', this.onConnect.bind(this));
+		socket.on('disconnect', this.onDisconnect.bind(this));
+		socket.on('move add', this.onAddMove.bind(this));
 	}
 
-	message(e){
-		const event = JSON.parse(e.data);		
+	onConnect(){
+		this.setState({connected: true});
+	}
+	onDisconnect(){
+		this.setState({connected: false});
+	}
+	onAddMove(){
 		if(event.name === 'move add'){
 			this.setMove(event.data)
 		}
 	}
-	open(){
-		this.setState({connected: true})
-	}
-	close(){
-		this.setState({connected: false})
-	}
 
 	addMove(move){
-		let msg = {
-			name: 'move add',
-			data: move
-		}
-
-		this.ws.send(JSON.stringify(msg))
+		this.socket.emit('move add', {move});
 	}
 
 	setMove(move){
