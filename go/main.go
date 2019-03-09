@@ -1,40 +1,25 @@
 package main
 
 import (
-	"fmt"
-	"github.com/gorilla/websocket"
+	r "github.com/dancannon/gorethink"
+	"log"
 	"net/http"
 )
 
-//hijacks the connection and switch protocol from http to websockets
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	CheckOrigin:     func(r *http.Request) bool { return true },
-}
-
 func main() {
-	http.HandleFunc("/", handler)
-	http.ListenAndServe(":4000", nil)
-}
+	session, err := r.Connect(r.ConnectOpts{
+		Address:  "localhost:28015",
+		Database: "sudoku",
+	})
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	// fmt.Fprintf(w, "sudoku-battle response")
-	socket, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		fmt.Println(err)
-		return
+		log.Panic(err.Error())
 	}
-	for {
-		msgType, msg, err := socket.ReadMessage()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		fmt.Println(string(msg))
-		if err = socket.WriteMessage(msgType, msg); err != nil {
-			fmt.Println(err)
-			return
-		}
-	}
+
+	router := NewRouter(session)
+
+	router.Handle("move add", addMove)
+
+	http.Handle("/", router)
+	http.ListenAndServe(":4000", nil)
 }
