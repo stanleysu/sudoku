@@ -1,17 +1,22 @@
-import React, {Component} from 'react';
-import Board from './board/Board.jsx';
+import React, { Component } from "react";
+import Board from "./board/Board.jsx";
+import {
+	deepCopy,
+	getDefaultBoard,
+	isBetween1and9,
+	isBackspaceOrDelete
+} from "./utils.js";
+import Socket from "../socket.js";
 
-import {deepCopy, getDefaultBoard, isBetween1and9, isBackspaceOrDelete} from './utils.js';
-import Socket from '../socket.js';
-class App extends Component{
-	constructor(props){
+class App extends Component {
+	constructor(props) {
 		super(props);
 
 		const EMPTY_BOARD = getDefaultBoard();
 
-		this.state = { 
+		this.state = {
 			board: EMPTY_BOARD,
-			selectedCell: { 
+			selectedCell: {
 				isSelected: false,
 				row: -1,
 				col: -1,
@@ -24,33 +29,33 @@ class App extends Component{
 		this.addMove = this.addMove.bind(this);
 	}
 
-	componentDidMount(){
+	componentDidMount() {
 		document.addEventListener("keydown", this.handleKeyDown);
 
-		let socket = this.socket = new Socket();
-		socket.on('connect', this.onConnect.bind(this));
-		socket.on('disconnect', this.onDisconnect.bind(this));
-		socket.on('move add', this.onAddMove.bind(this));
+		let socket = (this.socket = new Socket());
+		socket.on("connect", this.onConnect.bind(this));
+		socket.on("disconnect", this.onDisconnect.bind(this));
+		socket.on("move add", this.onAddMove.bind(this));
 	}
 
-	onConnect(){
-		this.setState({connected: true});
+	onConnect() {
+		this.setState({ connected: true });
 	}
-	onDisconnect(){
-		this.setState({connected: false});
+	onDisconnect() {
+		this.setState({ connected: false });
 	}
-	onAddMove(){
-		if(event.name === 'move add'){
-			this.setMove(event.data)
+	onAddMove() {
+		if (event.name === "move add") {
+			this.setMove(event.data);
 		}
 	}
 
-	addMove(move){
-		this.socket.emit('move add', {move});
+	addMove(move) {
+		this.socket.emit("move add", { move });
 	}
 
-	setMove(move){
-		let {board, selectedCell} = this.state;
+	setMove(move) {
+		let { board, selectedCell } = this.state;
 
 		board[move.row][move.col].value = move.value;
 		this.setState({
@@ -64,18 +69,20 @@ class App extends Component{
 	}
 
 	componentWillUnmount() {
-        document.removeEventListener("keydown", this.handleKeyDown);
-    }
+		document.removeEventListener("keydown", this.handleKeyDown);
+	}
 
-	toggleSelectedCell(cellPosition){
+	toggleSelectedCell(cellPosition) {
 		//if clicked same cell, flip isSelected
 		//if clicked different cell, isSelected = true
 
 		var isSelected = this.state.selectedCell.isSelected;
-		if(cellPosition.row == this.state.selectedCell.row && cellPosition.col == this.state.selectedCell.col){
+		if (
+			cellPosition.row == this.state.selectedCell.row &&
+			cellPosition.col == this.state.selectedCell.col
+		) {
 			isSelected = !isSelected;
-		}
-		else{
+		} else {
 			isSelected = true;
 		}
 
@@ -84,40 +91,47 @@ class App extends Component{
 				isSelected: isSelected,
 				row: cellPosition.row,
 				col: cellPosition.col,
-				value: this.state.board[cellPosition.row][cellPosition.col].value
+				value: this.state.board[cellPosition.row][cellPosition.col]
+					.value
 			}
 		});
 	}
 
-	handleKeyDown(event){
-		if(this.state.selectedCell.isSelected) {
+	handleKeyDown(event) {
+		if (this.state.selectedCell.isSelected) {
 			const keyCode = event.keyCode;
 			//check keycode between 1 to 9 on keyboard or numpad
-			if((isBetween1and9(keyCode) || isBackspaceOrDelete(keyCode)) &&  
-				this.state.board[this.state.selectedCell.row][this.state.selectedCell.col].editable){
-				const newValue = isBetween1and9(keyCode) ? parseInt(event.key) : null;
+			if (
+				(isBetween1and9(keyCode) || isBackspaceOrDelete(keyCode)) &&
+				this.state.board[this.state.selectedCell.row][
+					this.state.selectedCell.col
+				].editable
+			) {
+				const newValue = isBetween1and9(keyCode)
+					? parseInt(event.key)
+					: null;
 
 				const move = {
 					row: this.state.selectedCell.row,
 					col: this.state.selectedCell.col,
 					value: newValue
-				}
+				};
 				this.addMove(move);
 			}
 		}
 	}
 
-	render(){
+	render() {
 		return (
-			<div className='app'>
-				<Board 
-					board={this.state.board} 
+			<div className="app">
+				<Board
+					board={this.state.board}
 					selectedCell={this.state.selectedCell}
 					toggleSelectedCell={this.toggleSelectedCell}
 				/>
 			</div>
-		)
+		);
 	}
 }
 
-export default App
+export default App;
