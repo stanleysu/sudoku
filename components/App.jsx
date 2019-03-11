@@ -120,8 +120,15 @@ class App extends Component {
 	}
 
 	render() {
+		const url = "localhost:8080/" + this.props.match.params.gameId;
 		return (
 			<div className="app">
+				<div id="topbar">
+					<h1>Sudoku</h1>
+				</div>
+				<div id="share">
+					Send this link to friends: <a class="url">{url}</a>
+				</div>
 				<Board
 					board={this.state.board}
 					selectedCell={this.state.selectedCell}
