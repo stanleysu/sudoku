@@ -44,10 +44,9 @@ func (e *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, err.Error())
 		return
 	}
-
 	client := NewClient(socket, e.FindHandler, e.session)
+	defer client.Close()
 	go client.Write()
-
 	//use go routine of serveHTTP method instead of creating new one
 	client.Read()
 }

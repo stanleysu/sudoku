@@ -31,8 +31,8 @@ class App extends Component {
 
 	componentDidMount() {
 		document.addEventListener("keydown", this.handleKeyDown);
-
-		let socket = (this.socket = new Socket());
+		let ws = new WebSocket("ws://localhost:4000");
+		let socket = (this.socket = new Socket(ws));
 		socket.on("connect", this.onConnect.bind(this));
 		socket.on("disconnect", this.onDisconnect.bind(this));
 		socket.on("move add", this.onAddMove.bind(this));
@@ -40,20 +40,18 @@ class App extends Component {
 
 	onConnect() {
 		this.setState({ connected: true });
+		this.socket.emit("game subscribe");
 	}
 	onDisconnect() {
 		this.setState({ connected: false });
 	}
-	onAddMove() {
-		if (event.name === "move add") {
-			this.setMove(event.data);
-		}
+	onAddMove(move) {
+		this.setMove(move);
 	}
 
 	addMove(move) {
-		this.socket.emit("move add", { move });
+		this.socket.emit("move add", move);
 	}
-
 	setMove(move) {
 		let { board, selectedCell } = this.state;
 
@@ -109,7 +107,7 @@ class App extends Component {
 			) {
 				const newValue = isBetween1and9(keyCode)
 					? parseInt(event.key)
-					: null;
+					: 0;
 
 				const move = {
 					row: this.state.selectedCell.row,

@@ -5,103 +5,103 @@ function deepCopy(board) {
 function getDefaultBoard() {
 	const DEFAULT_BOARD = [
 		[
-			{ value: null, editable: true },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
 			{ value: 8, editable: false },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
 			{ value: 3, editable: false },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
 			{ value: 6, editable: false },
 			{ value: 9, editable: false },
-			{ value: null, editable: true }
+			{ value: 0, editable: true }
 		],
 		[
 			{ value: 1, editable: false },
 			{ value: 7, editable: false },
 			{ value: 6, editable: false },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
 			{ value: 9, editable: false },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
 			{ value: 2, editable: false },
 			{ value: 3, editable: false }
 		],
 		[
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
 			{ value: 3, editable: false },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
-			{ value: null, editable: true }
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true }
 		],
 		[
-			{ value: null, editable: true },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
 			{ value: 2, editable: false },
 			{ value: 9, editable: false },
 			{ value: 1, editable: false },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
 			{ value: 7, editable: false }
 		],
 		[
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
 			{ value: 8, editable: false },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
 			{ value: 6, editable: false },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
 			{ value: 1, editable: false },
-			{ value: null, editable: true }
+			{ value: 0, editable: true }
 		],
 		[
 			{ value: 9, editable: false },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
 			{ value: 7, editable: false },
 			{ value: 8, editable: false },
 			{ value: 4, editable: false },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
-			{ value: null, editable: true }
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true }
 		],
 		[
-			{ value: null, editable: true },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
 			{ value: 3, editable: false },
-			{ value: null, editable: true }
+			{ value: 0, editable: true }
 		],
 		[
 			{ value: 6, editable: false },
 			{ value: 9, editable: false },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
 			{ value: 5, editable: false },
-			{ value: null, editable: true },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
+			{ value: 0, editable: true },
 			{ value: 1, editable: false },
 			{ value: 8, editable: false },
 			{ value: 4, editable: false }
 		],
 		[
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
 			{ value: 1, editable: false },
 			{ value: 5, editable: false },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
 			{ value: 4, editable: false },
-			{ value: null, editable: true },
+			{ value: 0, editable: true },
 			{ value: 9, editable: false },
-			{ value: null, editable: true },
-			{ value: null, editable: true }
+			{ value: 0, editable: true },
+			{ value: 0, editable: true }
 		]
 	];
 	return DEFAULT_BOARD;

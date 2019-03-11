@@ -24,7 +24,7 @@ class Cell extends Component {
 		}
 
 		let cellValue;
-		if (this.props.cellData.value == null) {
+		if (this.props.cellData.value == 0) {
 			cellValue = "\u00A0";
 		} else {
 			cellValue = this.props.cellData.value;

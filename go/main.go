@@ -19,6 +19,7 @@ func main() {
 	router := NewRouter(session)
 
 	router.Handle("move add", addMove)
+	router.Handle("game subscribe", subscribeGame)
 
 	http.Handle("/", router)
 	http.ListenAndServe(":4000", nil)

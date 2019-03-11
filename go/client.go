@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	r "github.com/dancannon/gorethink"
 	"github.com/gorilla/websocket"
 )
@@ -9,10 +8,17 @@ import (
 type FindHandler func(string) (Handler, bool)
 
 type Client struct {
-	send        chan Message
-	socket      *websocket.Conn
-	findHandler FindHandler
-	session     *r.Session
+	send         chan Message
+	socket       *websocket.Conn
+	findHandler  FindHandler
+	session      *r.Session
+	stopChannels map[int]chan bool
+}
+
+func (c *Client) NewStopChannel(stopkey int) chan bool {
+	stop := make(chan bool)
+	c.stopChannels[stopkey] = stop
+	return stop
 }
 
 type Message struct {
@@ -36,7 +42,6 @@ func (client *Client) Read() {
 
 func (client *Client) Write() {
 	for msg := range client.send {
-		fmt.Printf("%#v\n", msg)
 		if err := client.socket.WriteJSON(msg); err != nil {
 			break
 		}
@@ -44,11 +49,19 @@ func (client *Client) Write() {
 	client.socket.Close()
 }
 
+func (client *Client) Close() {
+	for _, ch := range client.stopChannels {
+		ch <- true
+	}
+	close(client.send)
+}
+
 func NewClient(socket *websocket.Conn, findHandler FindHandler, session *r.Session) *Client {
 	return &Client{
-		send:        make(chan Message),
-		socket:      socket,
-		findHandler: findHandler,
-		session:     session,
+		send:         make(chan Message),
+		socket:       socket,
+		findHandler:  findHandler,
+		session:      session,
+		stopChannels: make(map[int]chan bool),
 	}
 }
