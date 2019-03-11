@@ -1,0 +1,21 @@
+#menu {
+	float: right;
+}
+#menu button {
+	padding: 5px;
+	border: 1px #ddd solid;
+	background: #eee;
+	font-size: 11px;
+	color: black;
+	border-radius: 5px;
+}
+#menu button:focus {
+	outline: 0;
+}
+
+#menu button:hover {
+	cursor: pointer;
+}
+#nextGameBtn {
+	margin-left: 2em;
+}

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import Header from "./Header.jsx";
+import "./Home.css";
 
 class Home extends Component {
 	render() {
@@ -7,9 +9,7 @@ class Home extends Component {
 		const linkToGame = "/" + gameId;
 		return (
 			<div id="home">
-				<div id="topbar">
-					<h1>Sudoku</h1>
-				</div>
+				<Header />
 				<p id="intro">
 					Play Sudoku online across multiple devices on a shared
 					board. To create a game or join an existing game, enter a
@@ -19,7 +19,7 @@ class Home extends Component {
 				<Link to={linkToGame}>
 					<button>GO</button>
 				</Link>
-				<div class="footer">Made for Mooney by Scooty</div>
+				<div className="footer">Made for Mooney by Scooty</div>
 			</div>
 		);
 	}

@@ -1,26 +1,26 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-class Cell extends Component {
+class BigCell extends Component {
 	onClick(e) {
-		this.props.toggleSelectedCell(this.props.cellPosition);
+		this.props.toggleSelectedCell(this.props.cellRow, this.props.cellCol);
 	}
 
 	render() {
-		let className = "boardCell";
+		let className = "bigCell boardCell";
 
 		if (!this.props.cellData.editable) {
-			className += " uneditable";
+			className += " uneditableCell";
 		} else {
-			className += " editable";
+			className += " editableCell";
 		}
 
 		if (
 			this.props.selectedCell.isSelected &&
-			this.props.selectedCell.row == this.props.cellPosition.row &&
-			this.props.selectedCell.col == this.props.cellPosition.col
+			this.props.selectedCell.row == this.props.cellRow &&
+			this.props.selectedCell.col == this.props.cellCol
 		) {
-			className += " selected";
+			className += " selectedCell";
 		}
 
 		let cellValue;
@@ -38,10 +38,10 @@ class Cell extends Component {
 	}
 }
 
-Cell.propTypes = {
+BigCell.propTypes = {
 	cellData: PropTypes.object.isRequired,
 	selectedCell: PropTypes.object.isRequired,
 	toggleSelectedCell: PropTypes.func.isRequired
 };
 
-export default Cell;
+export default BigCell;

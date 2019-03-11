@@ -3,17 +3,21 @@ import Board from "./board/Board.jsx";
 import {
 	deepCopy,
 	getDefaultBoard,
+	getEmptyPencilMarks,
 	isBetween1and9,
 	isBackspaceOrDelete
 } from "./utils.js";
+import Header from "./Header.jsx";
+import Menu from "./Menu.jsx";
 import Socket from "../socket.js";
+import "./App.css";
 
 class App extends Component {
 	constructor(props) {
 		super(props);
 
 		const EMPTY_BOARD = getDefaultBoard();
-
+		const EMPTY_PENCILMARKS = getEmptyPencilMarks();
 		this.state = {
 			board: EMPTY_BOARD,
 			selectedCell: {
@@ -22,20 +26,26 @@ class App extends Component {
 				col: -1,
 				val: 0
 			},
+			pencilMarks: EMPTY_PENCILMARKS,
+			pencilMode: false,
 			connected: false
 		};
 		this.toggleSelectedCell = this.toggleSelectedCell.bind(this);
+		this.togglePencilMode = this.togglePencilMode.bind(this);
+		this.togglePencilMarking = this.togglePencilMarking.bind(this);
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.addMove = this.addMove.bind(this);
+		this.fillCell = this.fillCell.bind(this);
+		this.makePencilSelection = this.makePencilSelection.bind(this);
 	}
 
 	componentDidMount() {
-		document.addEventListener("keydown", this.handleKeyDown);
 		let ws = new WebSocket("ws://localhost:4000");
 		let socket = (this.socket = new Socket(ws));
 		socket.on("connect", this.onConnect.bind(this));
 		socket.on("disconnect", this.onDisconnect.bind(this));
 		socket.on("move add", this.onAddMove.bind(this));
+		document.addEventListener("keydown", this.handleKeyDown);
 	}
 
 	onConnect() {
@@ -70,14 +80,14 @@ class App extends Component {
 		document.removeEventListener("keydown", this.handleKeyDown);
 	}
 
-	toggleSelectedCell(cellPosition) {
+	toggleSelectedCell(row, col) {
 		//if clicked same cell, flip isSelected
 		//if clicked different cell, isSelected = true
 
 		var isSelected = this.state.selectedCell.isSelected;
 		if (
-			cellPosition.row == this.state.selectedCell.row &&
-			cellPosition.col == this.state.selectedCell.col
+			row == this.state.selectedCell.row &&
+			col == this.state.selectedCell.col
 		) {
 			isSelected = !isSelected;
 		} else {
@@ -87,17 +97,17 @@ class App extends Component {
 		this.setState({
 			selectedCell: {
 				isSelected: isSelected,
-				row: cellPosition.row,
-				col: cellPosition.col,
-				value: this.state.board[cellPosition.row][cellPosition.col]
-					.value
+				row: row,
+				col: col,
+				value: this.state.board[row][col].value
 			}
 		});
 	}
 
 	handleKeyDown(event) {
+		const keyCode = event.keyCode;
+
 		if (this.state.selectedCell.isSelected) {
-			const keyCode = event.keyCode;
 			//check keycode between 1 to 9 on keyboard or numpad
 			if (
 				(isBetween1and9(keyCode) || isBackspaceOrDelete(keyCode)) &&
@@ -108,32 +118,71 @@ class App extends Component {
 				const newValue = isBetween1and9(keyCode)
 					? parseInt(event.key)
 					: 0;
-
-				const move = {
-					row: this.state.selectedCell.row,
-					col: this.state.selectedCell.col,
-					value: newValue
-				};
-				this.addMove(move);
+				this.fillCell(
+					this.state.selectedCell.row,
+					this.state.selectedCell.col,
+					newValue
+				);
 			}
 		}
+
+		if (keyCode == 80) {
+			this.togglePencilMode();
+		}
+	}
+
+	togglePencilMode() {
+		this.setState(prevState => ({
+			pencilMode: !prevState.pencilMode
+		}));
+	}
+
+	togglePencilMarking(row, col, i) {
+		let { pencilMarks } = this.state;
+		const curPencilMark = this.state.pencilMarks[row][col][i];
+		pencilMarks[row][col][i] = !curPencilMark;
+		this.setState({
+			pencilMarks: pencilMarks
+		});
+	}
+
+	makePencilSelection(row, col, value) {
+		this.fillCell(row, col, value);
+	}
+
+	fillCell(row, col, value) {
+		const move = {
+			row: row,
+			col: col,
+			value: value
+		};
+		this.addMove(move);
 	}
 
 	render() {
 		const url = "localhost:8080/" + this.props.match.params.gameId;
 		return (
 			<div className="app">
-				<div id="topbar">
-					<h1>Sudoku</h1>
+				<div id="gameContainer">
+					<Header />
+					<div id="share">
+						Send this link to friends: <a href={url}>{url}</a>
+					</div>
+					<hr />
+					<Board
+						board={this.state.board}
+						selectedCell={this.state.selectedCell}
+						toggleSelectedCell={this.toggleSelectedCell}
+						pencilMarks={this.state.pencilMarks}
+						togglePencilMarking={this.togglePencilMarking}
+						pencilMode={this.state.pencilMode}
+						makePencilSelection={this.makePencilSelection}
+					/>
+					<Menu
+						pencilMode={this.state.pencilMode}
+						togglePencilMode={this.togglePencilMode}
+					/>
 				</div>
-				<div id="share">
-					Send this link to friends: <a class="url">{url}</a>
-				</div>
-				<Board
-					board={this.state.board}
-					selectedCell={this.state.selectedCell}
-					toggleSelectedCell={this.toggleSelectedCell}
-				/>
 			</div>
 		);
 	}

@@ -1,0 +1,68 @@
+#root {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+#gameContainer {
+    width: 40.5em;
+    display: inline-block;
+}
+#board {
+    margin: 100px auto 20px auto;
+    width: 40.5em;
+    height: 40.5em;
+    box-shadow: 1px 4px 6px rgba(145, 161, 181, 0.3);
+}
+.boardRow {
+    height: 4.5em;
+    width: 40.5em;
+}
+.boardRow > div {
+    width: 4.5em;
+    height: 4.5em;
+    display: inline-block;
+    float: left;
+}
+.bigCell {
+    line-height: 4.5em;
+    text-align: center;
+}
+.bigCell span {
+    font-size: 30px;
+}
+.pencilCell {
+    height: 1.4em;
+    width: 1.4em;
+    display: inline-block;
+    color: rgb(230, 230, 230);
+}
+.pencilCell:hover {
+    color: rgb(150, 150, 150);
+    background-color: rgb(240, 248, 255);
+}
+.pencilMarked {
+    color: rgb(100, 100, 100);
+}
+.boardRow:not(:last-child) {
+    border-bottom: 1px solid black;
+}
+.boardRow:nth-child(3n + 3):not(:last-child) {
+    border-bottom: 2px solid black !important;
+}
+.boardCell:nth-child(3n + 3):not(:last-child) {
+    border-right: 2px solid black;
+}
+.boardCell:not(:last-child) {
+    border-right: 1px solid black;
+}
+.editableCell {
+    font-weight: 200;
+    color: rgb(0, 0, 255);
+}
+.uneditableCell {
+    font-weight: 300;
+    color: rgb(0, 0, 0);
+}
+.selectedCell {
+    background-color: rgb(240, 248, 255);
+}

@@ -1,0 +1,47 @@
+#home {
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#home #intro {
+    width: 400px;
+    font-family: verdana;
+    margin: 0 auto 3em auto;
+    text-align: justify;
+    font-size: 0.9em;
+    line-height: 1.5em;
+}
+
+#home input {
+    height: 50px;
+    width: 350px;
+    padding: 5px 10px;
+    font-size: 1.3em;
+    border: 1px #ddd solid;
+    letter-spacing: 0.1em;
+    display: inline-block;
+}
+
+#home button {
+    height: 50px;
+    width: 120px;
+    padding: 5px 10px;
+    background: #85de6f;
+    border: 1px #ddd solid;
+    font-size: 1em;
+    vertical-align: top;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: black;
+    text-align: center;
+}

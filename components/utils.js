@@ -118,4 +118,24 @@ function isBackspaceOrDelete(keyCode) {
 	return event.keyCode == 8 || event.keyCode == 56;
 }
 
-export { deepCopy, getDefaultBoard, isBetween1and9, isBackspaceOrDelete };
+function getEmptyPencilMarks() {
+	var pencilMarks = new Array();
+	for (var i = 0; i < 9; i++) {
+		pencilMarks[i] = new Array();
+		for (var j = 0; j < 9; j++) {
+			pencilMarks[i][j] = new Array();
+			for (var k = 0; k < 9; k++) {
+				pencilMarks[i][j][k] = false;
+			}
+		}
+	}
+	return pencilMarks;
+}
+
+export {
+	deepCopy,
+	getDefaultBoard,
+	getEmptyPencilMarks,
+	isBetween1and9,
+	isBackspaceOrDelete
+};
