@@ -4,6 +4,7 @@ import (
 	"fmt"
 	r "github.com/dancannon/gorethink"
 	"github.com/mitchellh/mapstructure"
+	"time"
 )
 
 //iota: constant values are set automatically: 0,1,2,...
@@ -17,9 +18,12 @@ type User struct {
 }
 
 type Move struct {
-	Row   int `json:"row" gorethink:"row"`
-	Col   int `json:"col" gorethink:"col"`
-	Value int `json:"value" gorethink:"value"`
+	Id        string    `gorethink:"id,omitempty"`
+	Row       int       `gorethink:"row"`
+	Col       int       `gorethink:"col"`
+	Value     int       `gorethink:"value"`
+	CreatedAt time.Time `gorethink:"createdAt"`
+	GameId    string    `gorethink:"gameId"`
 }
 
 func addMove(client *Client, data interface{}) {
@@ -31,7 +35,9 @@ func addMove(client *Client, data interface{}) {
 	}
 
 	go func() {
-		err := r.Table("game").
+		move.CreatedAt = time.Now()
+
+		err := r.Table("games").
 			Insert(move).
 			Exec(client.session)
 		if err != nil {
@@ -41,11 +47,24 @@ func addMove(client *Client, data interface{}) {
 }
 
 func subscribeGame(client *Client, data interface{}) {
-	fmt.Println("subscribe to game")
+	eventData := data.(map[string]interface{})
+	val, ok := eventData["gameId"]
+	if !ok {
+		return
+	}
+	gameId, ok := val.(string)
+	if !ok {
+		return
+	}
+
+	fmt.Println("subscribe to game " + gameId)
+
 	stop := client.NewStopChannel(GameStop)
 	result := make(chan r.ChangeResponse)
 
-	cursor, err := r.Table("game").
+	cursor, err := r.Table("games").
+		OrderBy(r.OrderByOpts{Index: r.Desc("createdAt")}).
+		Filter(r.Row.Field("gameId").Eq(gameId)).
 		Changes(r.ChangesOpts{IncludeInitial: true}).
 		Run(client.session)
 	if err != nil {
@@ -68,7 +87,6 @@ func subscribeGame(client *Client, data interface{}) {
 				return
 			case change := <-result:
 				client.send <- Message{"move add", change.NewValue}
-				fmt.Println("send move add msg")
 			}
 		}
 	}()

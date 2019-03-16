@@ -28,7 +28,8 @@ class App extends Component {
 			},
 			pencilMarks: EMPTY_PENCILMARKS,
 			pencilMode: false,
-			connected: false
+			connected: false,
+			gameId: this.props.match.params.gameId
 		};
 		this.toggleSelectedCell = this.toggleSelectedCell.bind(this);
 		this.togglePencilMode = this.togglePencilMode.bind(this);
@@ -50,7 +51,7 @@ class App extends Component {
 
 	onConnect() {
 		this.setState({ connected: true });
-		this.socket.emit("game subscribe");
+		this.socket.emit("game subscribe", { gameId: this.state.gameId });
 	}
 	onDisconnect() {
 		this.setState({ connected: false });
@@ -60,7 +61,7 @@ class App extends Component {
 	}
 
 	addMove(move) {
-		this.socket.emit("move add", move);
+		this.socket.emit("move add", { gameId: this.state.gameId, ...move });
 	}
 	setMove(move) {
 		let { board, selectedCell } = this.state;

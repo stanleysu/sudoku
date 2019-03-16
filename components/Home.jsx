@@ -4,9 +4,18 @@ import Header from "./Header.jsx";
 import "./Home.css";
 
 class Home extends Component {
+	constructor(props) {
+		super(props);
+		this.state = { gameId: "banana" };
+		this.handleChange = this.handleChange.bind(this);
+	}
+
+	handleChange(event) {
+		this.setState({ gameId: event.target.value });
+	}
+
 	render() {
-		const gameId = "SCOOTY";
-		const linkToGame = "/" + gameId;
+		const linkToGame = "/" + this.state.gameId;
 		return (
 			<div id="home">
 				<Header />
@@ -15,7 +24,11 @@ class Home extends Component {
 					board. To create a game or join an existing game, enter a
 					game identifier and click 'GO'.
 				</p>
-				<input type="text" value={gameId} />
+				<input
+					type="text"
+					defaultValue={this.state.gameId}
+					onChange={this.handleChange}
+				/>
 				<Link to={linkToGame}>
 					<button>GO</button>
 				</Link>
