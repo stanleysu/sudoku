@@ -14,7 +14,8 @@ const (
 )
 
 type User struct {
-	Name string `json:"name" gorethink:"name"`
+	Id   string `gorethink:"id,omitempty"`
+	Name string `gorethink:"name"`
 }
 
 type Move struct {

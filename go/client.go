@@ -3,6 +3,7 @@ package main
 import (
 	r "github.com/dancannon/gorethink"
 	"github.com/gorilla/websocket"
+	"log"
 )
 
 type FindHandler func(string) (Handler, bool)
@@ -13,6 +14,8 @@ type Client struct {
 	findHandler  FindHandler
 	session      *r.Session
 	stopChannels map[int]chan bool
+	id           string
+	username     string
 }
 
 func (c *Client) NewStopChannel(stopkey int) chan bool {
@@ -57,11 +60,23 @@ func (client *Client) Close() {
 }
 
 func NewClient(socket *websocket.Conn, findHandler FindHandler, session *r.Session) *Client {
+	var user User
+	user.Name = "anon"
+	res, err := r.Table("users").Insert(user).RunWrite(session)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	var id string
+	if len(res.GeneratedKeys) > 0 {
+		id = res.GeneratedKeys[0]
+	}
 	return &Client{
 		send:         make(chan Message),
 		socket:       socket,
 		findHandler:  findHandler,
 		session:      session,
 		stopChannels: make(map[int]chan bool),
+		id:           id,
+		username:     user.Name,
 	}
 }
